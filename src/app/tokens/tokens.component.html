@@ -1,0 +1,6 @@
+fetches completed be {{ totalDone + ' / ' + tokens.length}}
+<!-- <p *ngFor="let token of tokens;index as i">
+  {{token | json}}
+</p> -->
+
+<a class="btn btn-clear" title="Download JSON" [href]="downloadJsonHref" target="_blank" (click)="generateDownloadJsonUri()">click to download</a>
