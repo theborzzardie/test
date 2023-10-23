@@ -35,13 +35,13 @@ export class TokensComponent implements OnInit {
         // this.subscribeToSaveBulkResponse(this.serviceRequestService.initiateServiceRequest(serviceRequest), organisation.shortCode);
         this.getTokenData(data);
         this.totalDone += 1;
-      }, 2000 * (index + 1));
+      }, 5000 * (index + 1));
     });
 
 
     setTimeout(() => {
       console.log(JSON.stringify(this.tokens));
-    }, 2000 * this.tokens ?.length + 1);
+    }, 5000 * this.tokens ?.length + 1);
   }
 
   getTokenData(data?: any): void {
