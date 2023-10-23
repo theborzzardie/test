@@ -15,18 +15,13 @@ export class TokensComponent implements OnInit {
 
   totalDone = 0;
   downloadJsonHref: any;
+  tokens = TOKENS;
   constructor(
     private apiService: ApiService,
     private sanitizer: DomSanitizer,
 
-  ) { }
 
-  tokens = [
-    { "FULL_NAME": "LIMITED SAFARICOM KENYA", "REFERENCE": 61685489, "MBAIMETERS": "0122367165" },
-    { "FULL_NAME": "LIMITED SAFARICOM KENYA", "REFERENCE": 83895268, "MBAIMETERS": "062224729" },
-    { "FULL_NAME": "LIMITED SAFARICOM KENYA", "REFERENCE": 109601961, "MBAIMETERS": 37177040518 },
-    { "FULL_NAME": "LIMITED SARARICOM", "REFERENCE": 58475575, "MBAIMETERS": "050006178" },
-  ];
+  ) { }
 
   ngOnInit(): void {
     this.doLoop();
@@ -58,6 +53,7 @@ export class TokensComponent implements OnInit {
         // data.balance = res.body.data[0].balance;
         // data.prepayment = res.body.data[0].prepayment;
         data.exists = true;
+        data.errorMessage = '';
       },
       (error: any) => {
         console.log(error);
@@ -72,7 +68,7 @@ export class TokensComponent implements OnInit {
   generateDownloadJsonUri() {
     let theJSON = JSON.stringify(this.tokens);
     let blob = new Blob([theJSON], { type: 'text/json' });
-    let url= window.URL.createObjectURL(blob);
+    let url = window.URL.createObjectURL(blob);
     let uri = this.sanitizer.bypassSecurityTrustUrl(url);
     this.downloadJsonHref = uri;
   }
