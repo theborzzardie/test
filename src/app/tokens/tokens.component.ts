@@ -22,7 +22,7 @@ export class TokensComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.doLoop();
+    this.doLoop();
   }
 
   doLoop(): void {
