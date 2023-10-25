@@ -15,7 +15,7 @@ export class TokensComponent implements OnInit {
 
   totalDone = 0;
   downloadJsonHref: any;
-  tokens = TOKENEIGHT;
+  tokens = TOKENSNINE;
   success = 0;
   fail = 0;
   constructor(
