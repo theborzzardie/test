@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from "../api.service";
-import { TOKENSTHREE, TOKENSFOUR, TOKENFIVE, TOKENSIX, TOKENSEVEN, TOKENEIGHT, TOKENSNINE, TOKENTEN, TOKENELEVEN } from "../app.constants";
+import { TOKENSIX, TOKENSEVEN, TOKENEIGHT, TOKENSNINE, TOKENTEN, TOKENELEVEN } from "../app.constants";
 import { interval } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 
