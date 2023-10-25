@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from "../api.service";
-import { TOKENSTHREE, TOKENSFOUR, TOKENFIVE, TOKENSIX, TOKENSEVEN, TOKENEIGHT } from "../app.constants";
+import { TOKENSTHREE, TOKENSFOUR, TOKENFIVE, TOKENSIX, TOKENSEVEN, TOKENEIGHT, TOKENSNINE, TOKENTEN, TOKENELEVEN } from "../app.constants";
 import { interval } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -15,7 +15,9 @@ export class TokensComponent implements OnInit {
 
   totalDone = 0;
   downloadJsonHref: any;
-  tokens = TOKENSTHREE;
+  tokens = TOKENSFOUR;
+  success = 0;
+  fail = 0;
   constructor(
     private apiService: ApiService,
     private sanitizer: DomSanitizer,
@@ -47,11 +49,13 @@ export class TokensComponent implements OnInit {
       (res: any) => {
         data.exists = true;
         data.errorMessage = '';
+        this.success += 1;
       },
       (error: any) => {
         console.log(error);
         data.errorMessage = error ?.msgUser;
         data.exists = false;
+        this.fail += 1;
 
       }
     )
