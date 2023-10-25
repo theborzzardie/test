@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from "../api.service";
-import { TOKENSONE,TOKENSTWO } from "../app.constants";
+import { TOKENSTHREE, TOKENSFOUR, TOKENFIVE, TOKENSIX, TOKENSEVEN, TOKENEIGHT } from "../app.constants";
 import { interval } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -15,7 +15,7 @@ export class TokensComponent implements OnInit {
 
   totalDone = 0;
   downloadJsonHref: any;
-  tokens = TOKENSTWO;
+  tokens = TOKENSTHREE;
   constructor(
     private apiService: ApiService,
     private sanitizer: DomSanitizer,
