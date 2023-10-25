@@ -15,7 +15,7 @@ export class TokensComponent implements OnInit {
 
   totalDone = 0;
   downloadJsonHref: any;
-  tokens = TOKENSONE;
+  tokens = TOKENSTWO;
   constructor(
     private apiService: ApiService,
     private sanitizer: DomSanitizer,
