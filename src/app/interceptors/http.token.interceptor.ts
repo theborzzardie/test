@@ -22,7 +22,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
       return next.handle(req);
     }
 
-    const token = '816ff81d70d153a444fe8999e740965a';
+    const token = '7ae21992f43474ea2c750da356de7663';
 
     const request = req.clone({
       setHeaders: {
