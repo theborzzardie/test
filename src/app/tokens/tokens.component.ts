@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { ApiService } from '../api.service';
-import { TOKENONE } from '../app.constants';
+import { TOKENTWO } from '../app.constants';
 
 
 @Component( {
@@ -16,7 +16,7 @@ export class TokensComponent implements OnInit
 
   totalDone = 0;
   downloadJsonHref: any;
-  tokens = TOKENONE;
+  tokens = TOKENTWO;
   success = 0;
   fail = 0;
   constructor (
@@ -67,7 +67,7 @@ export class TokensComponent implements OnInit
         data.billDate = new Date( res.body.data[ 0 ].colBills[ 0 ].billDate ).toISOString() ?? 'NOT FOUND';
         data.dueDate = new Date( res.body.data[ 0 ].colBills[ 0 ].dueDate ).toISOString() ?? 'NOT FOUND';
         this.success += 1;
-        console.log( data );
+        // console.log( data );
 
       },
       ( error: any ) =>
