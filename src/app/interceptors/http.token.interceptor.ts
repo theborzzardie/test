@@ -1,42 +1,40 @@
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-} from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
-@Injectable({
+@Injectable( {
   providedIn: 'root',
-})
-export class HttpTokenInterceptor implements HttpInterceptor {
-  constructor(private router: Router) { }
-  intercept(
+} )
+export class HttpTokenInterceptor implements HttpInterceptor
+{
+  constructor ( private router: Router ) { }
+  intercept (
     req: HttpRequest<any>,
     next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-    if (req.url.includes('registration')) {
-      return next.handle(req);
+  ): Observable<HttpEvent<any>>
+  {
+    if ( req.url.includes( 'registration' ) ) {
+      return next.handle( req );
     }
 
-    const token = '7ae21992f43474ea2c750da356de7663';
+    const token = '89b93697cf179de5a617f0971d28905c';
 
-    const request = req.clone({
+    const request = req.clone( {
       setHeaders: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${ token }`,
       },
-    });
+    } );
 
-    return next.handle(request).pipe(
-      catchError((err) => {
-        if (err.status === 401 || err.status === 403) {
+    return next.handle( request ).pipe(
+      catchError( ( err ) =>
+      {
+        if ( err.status === 401 || err.status === 403 ) {
         }
         // const error = err.error.message || err.statusText;
-        return throwError(err.error);
-      })
+        return throwError( err.error );
+      } )
     );
   }
 }
