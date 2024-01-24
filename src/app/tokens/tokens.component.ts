@@ -62,7 +62,7 @@ export class TokensComponent implements OnInit
         data.exists = true;
         data.errorMessage = '';
         data.balance = res.body.data[ 0 ].balance;
-        data.fullName = res.body.data[ 0 ].colBills[ 0 ].fullName ?? 'NOT FOUND';
+        data.fullName = res.body.data[ 0 ].fullName ?? 'NOT FOUND';
         data.lastBillAmount = res.body.data[ 0 ].colBills[ 0 ].lastBillAmount ?? 'NOT FOUND';
         data.billDate = new Date( res.body.data[ 0 ].colBills[ 0 ].billDate ).toISOString() ?? 'NOT FOUND';
         data.dueDate = new Date( res.body.data[ 0 ].colBills[ 0 ].dueDate ).toISOString() ?? 'NOT FOUND';
