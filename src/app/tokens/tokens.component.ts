@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { ApiService } from '../api.service';
-import { TOKENTWO } from '../app.constants';
+import { TOKENONE } from '../app.constants';
 
 
 @Component( {
@@ -16,7 +16,7 @@ export class TokensComponent implements OnInit
 
   totalDone = 0;
   downloadJsonHref: any;
-  tokens = TOKENTWO;
+  tokens = TOKENONE;
   success = 0;
   fail = 0;
   constructor (
