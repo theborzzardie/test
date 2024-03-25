@@ -31,7 +31,7 @@
               <span> <i class="fa-solid fa-file-arrow-up"></i> &nbsp; {{fileUploading ? 'Uploading...' : 'Upload file'}}</span>
             </button>
 
-            <span class="file-name"> {{fileName}}</span>
+            <span class="file-name" [@fadeIn]> {{fileName}}</span>
           </div>
 
           <button class="btn btn-search" [disabled]="fileUploading || !tokens.length || !token || (searching && totalDone !== tokens.length)" (click)="doLoop()">{{searching ? 'Processing ...' : 'Process tasks'}}</button>

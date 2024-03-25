@@ -31,7 +31,7 @@ export class TokensComponent implements OnInit {
   success = 0;
   fail = 0;
   fileUploading = false;
-  fileName = 'testfilename';
+  fileName = '';
   token: string = '';
   searching = false;
   type = 'accountReference';
