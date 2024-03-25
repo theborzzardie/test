@@ -120,6 +120,7 @@ export class TokensComponent implements OnInit {
       (res: any) => {
         data.exists = 'true';
         data.errorMessage = '';
+        data.accountNumber = res.body.data[0].accountReference ?? 'NOT FOUND';
         data.meterNumber = res.body.data[0].meterList[0].serialNum ?? 'NOT FOUND';
         data.balance = res.body.data[0].balance;
         data.fullName = res.body.data[0].fullName ?? 'NOT FOUND';
