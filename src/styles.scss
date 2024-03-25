@@ -1,9 +1,100 @@
 /* You can add global styles to this file, and also import other style files */
 // ng build --base-href https://theborzzardie.github.io/test/ --output-path docs && git add . && git commit -m "docs ready for deployment" && git push
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+  font-family: "Raleway", sans-serif;
+  font-optical-sizing: auto;
+  scroll-behavior: smooth;
+  letter-spacing: 1px;
+  overflow-x: hidden;
+  background-color: #f1f3f4;
+}
+
+* a,
+* button,
+* input,
+* select,
+* textarea {
+  outline: none!important;
+  box-shadow: none!important;
+}
+
+* img {
+  user-drag: none!important;
+  user-select: none!important;
+  -moz-user-select: none!important;
+  -webkit-user-drag: none!important;
+  -webkit-user-select: none!important;
+  -ms-user-select: none!important;
+}
+
+.form-group{
+  margin-bottom: 10px;
+}
+
+input,
+select,
+textarea {
+  border: 2px solid #e1e1e1 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background-clip: padding-box !important;
+  color: #5f6063 !important;
+  padding: 10px 12px!important;
+}
+
+select{
+  padding: 0 12px!important;
+}
+
+input:active,
+input:focus,
+input:hover,
+select:active,
+select:focus,
+select:hover,
+textarea:active,
+textarea:focus,
+textarea:hover {
+  border: 2px solid #3c4043 !important;
+}
+
+* label {
+  color: #5f6063;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #80868b99 !important;
+  opacity: 1;
+  /* Firefox */
+}
+
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: #80868b99 !important;
+}
+
+::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: #80868b99 !important;
+}
+
 .redText {
   color: #d11a2a !important;
 }
 
 .greenText {
   color: #50B83C !important;
+}
+
+.disabled-anchor{
+  pointer-events: none!important;
+  cursor: not-allowed!important;
 }

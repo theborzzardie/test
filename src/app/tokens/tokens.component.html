@@ -1,10 +1,69 @@
-<p>fetches completed be {{ totalDone + ' / ' + tokens.length}}</p>
-<a class="btn btn-clear" title="Download JSON" [href]="downloadJsonHref" target="_blank"
-   (click)="generateDownloadJsonUri()">click to download</a>
+<div class="search-page">
+  <div class="container">
 
-<br><br>
-<p>BATCH 1</p>
-<p>current token : f6e063a103fbaeac7ac5bd33ae211bfc </p>
+    <div class="card">
 
-<p class="greenText">Success count : {{success}}</p>
-<p class="redText">Fail count : {{fail}}</p>
+      <h4>Upload Excel & paste Token</h4>
+
+      <div class="row">
+        <div class="col-md-6 bdr-right">
+
+          <h5>Step 1</h5>
+
+          <div class="form-group">
+            <label for="">Search type</label>
+            <select class="form-control" name="type" [(ngModel)]="type" [disabled]="searching || fileUploading">
+              <option value="accountReference">Account number</option>
+              <option value="serialNumberMeter">Meter number</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="token">Token</label>
+            <input type="text" name="token" [(ngModel)]="token" (ngModelChange)="writeToLocal()" class="form-control" [readonly]="searching || fileUploading" autocomplete="off">
+          </div>
+
+          <div for="token">&nbsp;</div>
+
+          <div class="d-flex align-items-center mb-4">
+            <input id="scoredFileInput" type="file" id="uploadFileInput" accept=".xlsx, .xls" (change)="uploadRefreshedFile($event)" hidden />
+            <button type="button" class="btn btn-upload" (click)="openUploadDialog()" [disabled]="searching || fileUploading">
+              <span> <i class="fa-solid fa-file-arrow-up"></i> &nbsp; {{fileUploading ? 'Uploading...' : 'Upload file'}}</span>
+            </button>
+
+            <span class="file-name"> {{fileName}}</span>
+          </div>
+
+          <button class="btn btn-search" [disabled]="fileUploading || !tokens.length || !token || (searching && totalDone !== tokens.length)" (click)="doLoop()">{{searching ? 'Processing ...' : 'Process tasks'}}</button>
+
+
+        </div>
+
+        <div class="col-md-6 mt-sm-4 mt-md-0">
+          <h5>Step 2</h5>
+
+          <!-- <p>current token : {{token}} </p> -->
+
+          <p>Fetches completed : <strong>{{ totalDone + ' / ' + tokens.length}}</strong></p>
+          <!-- <a class="btn btn-upload" title="Download JSON" [href]="downloadJsonHref" target="_blank" (click)="generateDownloadJsonUri()" [ngClass]="{ 'disabled-anchor': searching || fileUploading}">Download file</a> -->
+          <button class="btn btn-upload mb-3" title="Download JSON" (click)="generateExcel()" [disabled]="fileUploading || !tokens.length || !token || totalDone !== tokens.length" sandbox="allow-downloads">
+            <i class="fa-solid fa-file-arrow-down"></i> &nbsp; Download file
+          </button>
+
+
+          <p class="greenText">Success count : {{success}}</p>
+          <p class="redText">Fail count : {{fail}}</p>
+        </div>
+      </div>
+
+
+
+
+
+    </div>
+
+
+
+  </div>
+
+</div>

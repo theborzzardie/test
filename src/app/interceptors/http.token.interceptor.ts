@@ -19,7 +19,8 @@ export class HttpTokenInterceptor implements HttpInterceptor
       return next.handle( req );
     }
 
-    const token = 'f6e063a103fbaeac7ac5bd33ae211bfc';
+    const token = localStorage.getItem('kplctoken') ?? '';
+
 
     const request = req.clone( {
       setHeaders: {
