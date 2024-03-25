@@ -81,8 +81,8 @@ export class TokensComponent implements OnInit {
       const data = reader.result;
       workBook = XLSX.read(data, { type: 'binary' });
       jsonData = XLSX.utils.sheet_to_json(workBook.Sheets[workBook.SheetNames[0]]);
-      this.tokens = jsonData.slice(0, 5);
-      // this.tokens = jsonData;
+      // this.tokens = jsonData.slice(0, 5);
+      this.tokens = jsonData;
 
       // console.log(jsonData);
       // console.log('isComplete', this.tokens);
