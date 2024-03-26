@@ -18,10 +18,10 @@
             </select>
           </div>
 
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="token">Token</label>
             <input type="text" name="token" [(ngModel)]="token" (ngModelChange)="writeToLocal()" class="form-control" [readonly]="searching || fileUploading" autocomplete="off">
-          </div>
+          </div> -->
 
           <div for="token">&nbsp;</div>
 
@@ -34,7 +34,7 @@
             <span class="file-name" [@fadeIn]> {{fileName}}</span>
           </div>
 
-          <button class="btn btn-search" [disabled]="fileUploading || !tokens.length || !token || (searching && totalDone !== tokens.length)" (click)="doLoop()">{{searching ? 'Processing ...' : 'Process tasks'}}</button>
+          <button class="btn btn-search" [disabled]="fileUploading || !tokens.length || (searching && totalDone !== tokens.length)" (click)="doLoop()">{{searching ? 'Processing ...' : 'Process tasks'}}</button>
 
 
         </div>
@@ -46,7 +46,9 @@
 
           <p>Fetches completed : <strong>{{ totalDone + ' / ' + tokens.length}}</strong></p>
           <!-- <a class="btn btn-upload" title="Download JSON" [href]="downloadJsonHref" target="_blank" (click)="generateDownloadJsonUri()" [ngClass]="{ 'disabled-anchor': searching || fileUploading}">Download file</a> -->
-          <button class="btn btn-upload mb-3" title="Download JSON" (click)="generateExcel()" [disabled]="fileUploading || !tokens.length || !token || totalDone !== tokens.length" sandbox="allow-downloads">
+          <span class="redText d-block mb-1" *ngIf="searching">*<small> click download only if sure</small></span>
+          <button class="btn btn-upload mb-3" title="Download JSON" (click)="generateExcel()" [disabled]="fileUploading || !tokens.length" sandbox="allow-downloads">
+            <!-- || totalDone !== tokens.length -->
             <i class="fa-solid fa-file-arrow-down"></i> &nbsp; Download file
           </button>
 

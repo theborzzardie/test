@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { style, animate, transition, trigger } from '@angular/animations';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { ApiService } from '../api.service';
 // import { TOKENONE } from '../app.constants';
@@ -43,12 +44,27 @@ export class TokensComponent implements OnInit {
 
   ngOnInit(): void {
     // console.log( new Date( 1703710800000 ).toISOString());
-    // this.doLoop();
-    this.token = localStorage.getItem('kplctoken') ?? '';
+    // this.token = localStorage.getItem('kplctoken') ?? '';
+    // this.getToken();
   }
 
   openUploadDialog(): void {
     document.getElementById('uploadFileInput') ?.click();
+  }
+
+
+  getToken(): void {
+    this.apiService.getToken().subscribe(
+      (res: any) => {
+        // console.log(res);
+        localStorage.setItem('kplctoken', res.access_token);
+
+      },
+      (error: any) => {
+        // console.log(error);
+
+      }
+    )
   }
 
   uploadRefreshedFile(event: any): void {
@@ -66,7 +82,7 @@ export class TokensComponent implements OnInit {
 
     setTimeout(() => {
       this.extractDataFromFile(file);
-    }, 2000);
+    }, 1200);
   }
 
   extractDataFromFile(file: File): void {
@@ -81,7 +97,7 @@ export class TokensComponent implements OnInit {
       const data = reader.result;
       workBook = XLSX.read(data, { type: 'binary' });
       jsonData = XLSX.utils.sheet_to_json(workBook.Sheets[workBook.SheetNames[0]]);
-      // this.tokens = jsonData.slice(0, 5);
+      // this.tokens = jsonData.slice(0, 2);
       this.tokens = jsonData;
 
       // console.log(jsonData);
@@ -106,20 +122,19 @@ export class TokensComponent implements OnInit {
         this.getTokenData(data);
         this.totalDone += 1;
         this.searching = this.totalDone === this.tokens.length ? false : true;
+
       }, 1500 * (index + 1));
     });
 
-
-    setTimeout(() => {
-      console.log(JSON.stringify(this.tokens));
-    }, 1500 * this.tokens ?.length + 2 );
+    // setTimeout(() => {
+    //   this.totalDone === this.tokens.length ? console.log(JSON.stringify(this.tokens)) : '';
+    // }, 1500 * this.tokens?.length + 5 );
   }
 
   getTokenData(data?: any): void {
     this.apiService.getTokenData(data.SEARCH_NUMBER, this.type).subscribe(
       (res: any) => {
         data.exists = 'true';
-        data.errorMessage = '';
         data.accountNumber = res.body.data[0].accountReference ?? 'NOT FOUND';
         data.meterNumber = res.body.data[0].meterList[0].serialNum ?? 'NOT FOUND';
         data.balance = res.body.data[0].balance;
@@ -128,13 +143,21 @@ export class TokensComponent implements OnInit {
         data.billDate = new Date(res.body.data[0].colBills[0].billDate).toISOString() ?? 'NOT FOUND';
         data.dueDate = new Date(res.body.data[0].colBills[0].dueDate).toISOString() ?? 'NOT FOUND';
         this.success += 1;
+        data.errorMessage = '';
         // console.log( data );
 
       },
       (error: any) => {
-        console.log(error);
-        data.errorMessage = error ?.msgUser;
-        data.exists = 'false';
+        // console.log(error);
+        if (error.fault.message === 'Invalid Credentials' || error.fault.message === 'Missing Credentials') {
+          this.getToken();
+          data.retry = 'true';
+
+        } else {
+          data.errorMessage = error ?.msgUser;
+          data.exists = 'false';
+        }
+
         this.fail += 1;
 
       }
@@ -150,8 +173,6 @@ export class TokensComponent implements OnInit {
     this.downloadJsonHref = uri;
   }
 
-
-
   generateExcel(): void {
     const filename = this.fileName + '-processed.xlsx'
     const workSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.tokens);
@@ -160,11 +181,6 @@ export class TokensComponent implements OnInit {
 
     XLSX.writeFile(workBook, filename);
   }
-
-  writeToLocal(): void {
-    this.token.length ? localStorage.setItem('kplctoken', this.token) : '';
-  }
-
 
 
 
