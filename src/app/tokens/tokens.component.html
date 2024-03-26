@@ -34,7 +34,7 @@
             <span class="file-name" [@fadeIn]> {{fileName}}</span>
           </div>
 
-          <button class="btn btn-search" [disabled]="fileUploading || !tokens.length || (searching && totalDone !== tokens.length)" (click)="doLoop()">{{searching ? 'Processing ...' : 'Process tasks'}}</button>
+          <button class="btn btn-search" *ngIf="totalDone === 0 || totalDone !== tokens.length" [disabled]="fileUploading || !tokens.length || (searching && totalDone !== tokens.length)" (click)="doLoop()">{{searching ? 'Processing ...' : 'Process tasks'}}</button>
 
 
         </div>
@@ -46,15 +46,21 @@
 
           <p>Fetches completed : <strong>{{ totalDone + ' / ' + tokens.length}}</strong></p>
           <!-- <a class="btn btn-upload" title="Download JSON" [href]="downloadJsonHref" target="_blank" (click)="generateDownloadJsonUri()" [ngClass]="{ 'disabled-anchor': searching || fileUploading}">Download file</a> -->
+
+          <span class="d-block mb-1 greenText">Success count : {{success}}</span>
+          <span class="d-block mb-1 redText">Fail count : {{fail}}</span>
+          <span class="d-block mb-1 redText">Retry count : {{tokensToRetry?.length ?? 0}}</span>
+          <span class="d-block mb-4" [ngClass]="{'greenText':tasksToRetry > 0 && tasksToRetry === tokensToRetry?.length}">Retries completed : <strong>{{ tasksToRetry + ' / ' + tokensToRetry?.length}}</strong></span>
+
+          <button class="btn btn-search" *ngIf="tokensToRetry?.length && tasksToRetry !== tokensToRetry?.length" [disabled]="searching &&  ( (totalDone !== tokens.length) || (tasksToRetry !== tokensToRetry?.length))"
+            (click)="retryFailed()">{{searching ? 'Retrying ...' : 'Retry tasks'}}</button>
+
+
           <span class="redText d-block mb-1" *ngIf="searching">*<small> click download only if sure</small></span>
-          <button class="btn btn-upload mb-3" title="Download JSON" (click)="generateExcel()" [disabled]="fileUploading || !tokens.length" sandbox="allow-downloads">
+          <button class="btn btn-upload mb-3" title="Download JSON" (click)="generateExcel()" [disabled]="fileUploading || !tokens.length || totalDone === 0" sandbox="allow-downloads">
             <!-- || totalDone !== tokens.length -->
             <i class="fa-solid fa-file-arrow-down"></i> &nbsp; Download file
           </button>
-
-
-          <p class="greenText">Success count : {{success}}</p>
-          <p class="redText">Fail count : {{fail}}</p>
         </div>
       </div>
 

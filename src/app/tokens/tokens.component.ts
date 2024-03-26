@@ -36,6 +36,10 @@ export class TokensComponent implements OnInit {
   token: string = '';
   searching = false;
   type = 'accountReference';
+  tasksToRetry = 0;
+  showRetryBtn = false;
+  tokensToRetry: any = [];
+
 
   constructor(
     private apiService: ApiService,
@@ -44,11 +48,9 @@ export class TokensComponent implements OnInit {
 
   ngOnInit(): void {
     // console.log( new Date( 1703710800000 ).toISOString());
-  if (!localStorage.getItem('kplctoken')) {
-    console.log('test');
-
-    // this.getToken();
-  }
+    if (!localStorage.getItem('kplctoken')) {
+      this.getToken();
+    }
   }
 
   openUploadDialog(): void {
@@ -77,6 +79,10 @@ export class TokensComponent implements OnInit {
     this.success = 0;
     this.fail = 0;
     this.fileName = '';
+    this.tasksToRetry = 0;
+    this.tokensToRetry = [];
+    this.showRetryBtn = false;
+
 
     const file: File = event.target.files[0];
 
@@ -154,19 +160,18 @@ export class TokensComponent implements OnInit {
         // console.log(error);
         if (error.fault.message === 'Invalid Credentials' || error.fault.message === 'Missing Credentials') {
           this.getToken();
-          data.retry = 'true';
-
+          this.showRetryBtn = true;
+          data.retry = true;
+          this.tokensToRetry.push(data);
         } else {
           data.errorMessage = error ?.msgUser;
           data.exists = 'false';
+          this.fail += 1;
         }
-
-        this.fail += 1;
 
       }
     )
   }
-
 
   generateDownloadJsonUri(): void {
     let theJSON = JSON.stringify(this.tokens);
@@ -177,12 +182,33 @@ export class TokensComponent implements OnInit {
   }
 
   generateExcel(): void {
+    const tokens: any = [...this.tokens, ...this.tokensToRetry];
     const filename = this.fileName + '-processed.xlsx'
-    const workSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.tokens);
+    const workSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(tokens);
     const workBook: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workBook, workSheet, 'Data');
 
     XLSX.writeFile(workBook, filename);
+  }
+
+
+  retryFailed(): void {
+    this.searching = true;
+    this.tasksToRetry = 0;
+
+    this.tokens = this.tokens.filter((token: any) => !token.retry);
+    this.totalDone = this.tokens.length;
+
+    this.tokensToRetry.forEach((data: any, index: number) => {
+      setTimeout(() => {
+        this.getTokenData(data);
+        this.tasksToRetry += 1;
+        delete data.retry;
+        this.searching = this.tasksToRetry === this.tokensToRetry.length ? false : true;
+
+      }, 1500 * (index + 1));
+    });
+
   }
 
 
