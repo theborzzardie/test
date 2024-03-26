@@ -44,8 +44,11 @@ export class TokensComponent implements OnInit {
 
   ngOnInit(): void {
     // console.log( new Date( 1703710800000 ).toISOString());
-    // this.token = localStorage.getItem('kplctoken') ?? '';
+  if (!localStorage.getItem('kplctoken')) {
+    console.log('test');
+
     // this.getToken();
+  }
   }
 
   openUploadDialog(): void {
