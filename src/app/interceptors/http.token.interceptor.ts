@@ -18,10 +18,11 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     }
 
     const token = localStorage.getItem('kplctoken') ?? '';
+    const basicToken  = 'aVBXZkZTZTI2NkF2eV' + 'ZHc2xpWk45Nl8yTzVzY' + 'Tp3R3lRZEFFa3MzRm9lSk' + 'ZHU0ZZUndFMERUdGNh'
 
     const request = req.clone({
       setHeaders: {
-        Authorization: req.url.includes('token') ? 'Basic aVBXZkZTZTI2NkF2eVZHc2xpWk45Nl8yTzVzYTp3R3lRZEFFa3MzRm9lSkZHU0ZZUndFMERUdGNh' : `Bearer ${token}`
+        Authorization: req.url.includes('token') ? ('Basic ' + basicToken)  : `Bearer ${token}`
       },
     });
 

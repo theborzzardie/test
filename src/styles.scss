@@ -2,15 +2,15 @@
 // ng build --base-href https://theborzzardie.github.io/test/ --output-path docs && git add . && git commit -m "docs ready for deployment" && git push
 @import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 @import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
-@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 body {
-  font-family: "Raleway", sans-serif;
+  font-family: "Poppins", sans-serif;
   font-optical-sizing: auto;
   scroll-behavior: smooth;
   letter-spacing: 1px;
   overflow-x: hidden;
-  background-color: #f1f3f4;
+  background-color: #fff;
 }
 
 * a,
@@ -48,6 +48,8 @@ textarea {
   background-clip: padding-box !important;
   color: #5f6063 !important;
   padding: 10px 12px!important;
+  font-size: 0.9rem!important;
+  height: 38px!important;
 }
 
 select{
@@ -68,15 +70,17 @@ textarea:hover {
 
 * label {
   color: #5f6063;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.9rem;
   letter-spacing: 1px;
+  margin-bottom: 5px;
 }
 
 ::placeholder {
   /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: #80868b99 !important;
   opacity: 1;
+  font-size: 0.9rem;
   /* Firefox */
 }
 

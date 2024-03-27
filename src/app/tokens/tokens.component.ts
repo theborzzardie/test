@@ -32,13 +32,13 @@ export class TokensComponent implements OnInit {
   success = 0;
   fail = 0;
   fileUploading = false;
-  fileName = '';
+  fileName = 'file name';
+  fileSize = 0;
   token: string = '';
   searching = false;
   type = 'accountReference';
-  tasksToRetry = 0;
-  showRetryBtn = false;
-  tokensToRetry: any = [];
+  step = 1;
+  refreshPage = false;
 
 
   constructor(
@@ -58,7 +58,7 @@ export class TokensComponent implements OnInit {
   }
 
 
-  getToken(data?:any): void {
+  getToken(data?: any): void {
     this.apiService.getToken().subscribe(
       (res: any) => {
         // console.log(res);
@@ -74,30 +74,32 @@ export class TokensComponent implements OnInit {
   }
 
   uploadRefreshedFile(event: any): void {
-    this.fileUploading = true;
-    this.totalDone = 0;
-    this.tokens = [];
-    this.success = 0;
-    this.fail = 0;
-    this.fileName = '';
-    this.tasksToRetry = 0;
-    this.tokensToRetry = [];
-    this.showRetryBtn = false;
 
+    let file: File;
 
-    const file: File = event.target.files[0];
+    if (event.target ?.files ?.length) {
+      this.fileUploading = true;
+      this.totalDone = 0;
+      this.tokens = [];
+      this.success = 0;
+      this.fail = 0;
+      this.fileName = '';
 
-    const formData = new FormData();
-    formData.append('file', file);
+      file = event.target.files[0];
 
-    setTimeout(() => {
-      this.extractDataFromFile(file);
-    }, 1200);
+      this.fileName = file.name.substring(0, file.name.lastIndexOf('.'));
+      this.fileSize = file.size;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      setTimeout(() => {
+        this.extractDataFromFile(file);
+      }, 1200);
+    }
   }
 
   extractDataFromFile(file: File): void {
-
-    this.fileName = file.name.substring(0, file.name.lastIndexOf('.'));
 
     let workBook: XLSX.WorkBook | null = null;
     let jsonData: any = [];
@@ -110,8 +112,6 @@ export class TokensComponent implements OnInit {
       // this.tokens = jsonData.slice(0, 3);
       this.tokens = jsonData;
 
-      // console.log(jsonData);
-      // console.log('isComplete', this.tokens);
       this.fileUploading = false;
 
     };
@@ -124,8 +124,7 @@ export class TokensComponent implements OnInit {
   doLoop(): void {
     this.totalDone = 0;
     this.searching = true;
-    // use below to test one
-    // this.getTokenData( this.tokens[ 0 ] );
+    this.step = 2;
 
     this.tokens.forEach((data: any, index: number) => {
       setTimeout(() => {
@@ -160,11 +159,9 @@ export class TokensComponent implements OnInit {
       },
       (error: any) => {
         console.log(error);
-        if (error?.fault && error?.fault?.message && (error.fault?.message === 'Invalid Credentials' || error.fault?.message === 'Missing Credentials')) {
+        if (error ?.fault && error ?.fault ?.message && (error.fault ?.message === 'Invalid Credentials' || error.fault ?.message === 'Missing Credentials')) {
           this.getToken(data);
-          // this.showRetryBtn = true;
-          // data.retry = true;
-          // this.tokensToRetry.push(data);
+
         } else {
           data.errorMessage = error ?.msgUser;
           data.exists = 'false';
@@ -176,7 +173,7 @@ export class TokensComponent implements OnInit {
   }
 
   insertReadingValueString(latestUsageList: any): string {
-    const readingValueList:any[] = [];
+    const readingValueList: any[] = [];
     latestUsageList.forEach((item: any) => {
       readingValueList.push(item.usageTypeDesc + " — " + item.readingValue);
     });
@@ -193,33 +190,18 @@ export class TokensComponent implements OnInit {
   }
 
   generateExcel(): void {
-    const tokens: any = [...this.tokens, ...this.tokensToRetry];
+    this.refreshPage = true;
+
     const filename = this.fileName + '-processed.xlsx'
-    const workSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(tokens);
+    const workSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.tokens);
     const workBook: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workBook, workSheet, 'Data');
 
     XLSX.writeFile(workBook, filename);
-  }
 
-
-  retryFailed(): void {
-    this.searching = true;
-    this.tasksToRetry = 0;
-
-    this.tokens = this.tokens.filter((token: any) => !token.retry);
-    this.totalDone = this.tokens.length;
-
-    this.tokensToRetry.forEach((data: any, index: number) => {
-      setTimeout(() => {
-        this.getTokenData(data);
-        this.tasksToRetry += 1;
-        delete data.retry;
-        this.searching = this.tasksToRetry === this.tokensToRetry.length ? false : true;
-
-      }, 1500 * (index + 1));
-    });
-
+    setTimeout(() => {
+      location.reload();
+    }, 7000);
   }
 
 

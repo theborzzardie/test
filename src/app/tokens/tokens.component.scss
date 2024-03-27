@@ -1,52 +1,107 @@
 .search-page {
   padding-top: 10vh;
 
+
   .card {
     background-color: #fff;
-    border-radius: 12px;
-    border: 1px solid #e1e1e1;
-    padding: 20px;
+    border-radius: 22px;
+    border: 1px solid #f1f1f199;
+    // border:none;
+    padding: 40px 20px;
     color: #3c4043;
+    box-shadow: 0 20px 30px 0 rgba(0,0,0,0.1);
 
     h4 {
-      margin-bottom: 20px;
       font-size: 1.2rem;
-      margin-left: 10px;
       font-weight: 600;
     }
 
-    .bdr-right {
-      border-right: 2px solid #e1e1e1;
+    h5{
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom:3px;
     }
 
-    .col-md-6 {
-      padding: 0 30px;
+    .description{
+      font-size: 0.8rem;
+      color: #80868b;
+      display: block;
+      margin-bottom: 20px;
+      font-weight: 300;
+
     }
 
-    .btn-upload {
+    .steps-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 15px 0;
+
+      .figure {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background-color: #e1e1e1;
+        color: #3c4043;
+        font-size: 0.9rem;
+        font-weight: 600;
+        display: flex;
+        justify-content: center;
+        padding-top: 7px;
+      }
+
+      .active-figure {
+        background-color: #3c4043;
+        color: #fff;
+      }
+
+      .connector {
+        width: 100px;
+        height: 5px;
+        background-color: #3c4043;
+        margin: 0 10px;
+        border-radius: 5px;
+      }
+    }
+
+
+    .btn-upload,.btn-download {
       background-color: #003d4c;
       color: #fff;
       font-size: 0.9rem;
-      font-weight: 600;
-      min-width: 10px;
+      font-weight: 500;
       transition: all 0.2s;
       width: 200px;
       letter-spacing: 1px;
     }
 
+    .btn-download{
+      width: 100%;
+    }
+
     .file-name {
       // display: block;
-      font-weight: 600;
-      margin-left: 10px;
+      font-weight: 400;
+      margin-left: 5px;
       font-size: 0.9rem;
+      color: #5f6063;
+      display: block;
+      word-wrap: break-all!important;
+    }
+    .file-size {
+      // display: block;
+      font-weight: 300;
+      margin-left: 5px;
+      font-size: 0.8rem;
       color: #80868b;
+      display: block;
     }
 
     .btn-search {
       background-color: #14713f;
       color: #fff;
       font-size: 0.9rem;
-      font-weight: 600;
+      font-weight: 500;
       min-width: 10px;
       transition: all 0.2s;
       width: 100%;
@@ -56,9 +111,7 @@
   }
 }
 @media (max-width: 770px) {
-  .search-page {
-    padding-top:2vh!important;
-  }
+
   h4 {
     font-size: 1rem!important;
     margin-left: 0!important;
@@ -72,13 +125,13 @@
     width: 100%!important;
   }
 
-  .d-flex{
+  .d-flex {
     flex-wrap: wrap;
   }
 
   .file-name {
-    display: block!important;
-    margin-top: 10px;
+    // display: block!important;
+    // margin-top: 10px;
   }
 
   .col-md-6 {
