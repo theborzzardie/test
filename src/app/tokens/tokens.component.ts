@@ -151,9 +151,10 @@ export class TokensComponent implements OnInit {
         data.lastBillAmount = res.body.data[0].colBills[0].lastBillAmount ?? 'NOT FOUND';
         data.billDate = new Date(res.body.data[0].colBills[0].billDate).toISOString() ?? 'NOT FOUND';
         data.dueDate = new Date(res.body.data[0].colBills[0].dueDate).toISOString() ?? 'NOT FOUND';
+        data.readingValue = this.insertReadingValueString(res.body.data[0].meterList[0].latestUsageList);
         this.success += 1;
         data.errorMessage = '';
-        // console.log( data );
+        // console.log(data);
 
       },
       (error: any) => {
@@ -171,6 +172,15 @@ export class TokensComponent implements OnInit {
 
       }
     )
+  }
+
+  insertReadingValueString(latestUsageList: any): string {
+    const readingValueList:any[] = [];
+    latestUsageList.forEach((item: any) => {
+      readingValueList.push(item.usageTypeDesc + " — " + item.readingValue);
+    });
+
+    return readingValueList.toString();
   }
 
   generateDownloadJsonUri(): void {
