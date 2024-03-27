@@ -58,11 +58,12 @@ export class TokensComponent implements OnInit {
   }
 
 
-  getToken(): void {
+  getToken(data?:any): void {
     this.apiService.getToken().subscribe(
       (res: any) => {
         // console.log(res);
         localStorage.setItem('kplctoken', res.access_token);
+        this.getTokenData(data);
 
       },
       (error: any) => {
@@ -106,7 +107,7 @@ export class TokensComponent implements OnInit {
       const data = reader.result;
       workBook = XLSX.read(data, { type: 'binary' });
       jsonData = XLSX.utils.sheet_to_json(workBook.Sheets[workBook.SheetNames[0]]);
-      // this.tokens = jsonData.slice(0, 2);
+      // this.tokens = jsonData.slice(0, 3);
       this.tokens = jsonData;
 
       // console.log(jsonData);
@@ -158,12 +159,12 @@ export class TokensComponent implements OnInit {
 
       },
       (error: any) => {
-        // console.log(error);
-        if (error.fault.message === 'Invalid Credentials' || error.fault.message === 'Missing Credentials') {
-          this.getToken();
-          this.showRetryBtn = true;
-          data.retry = true;
-          this.tokensToRetry.push(data);
+        console.log(error);
+        if (error?.fault && error?.fault?.message && (error.fault?.message === 'Invalid Credentials' || error.fault?.message === 'Missing Credentials')) {
+          this.getToken(data);
+          // this.showRetryBtn = true;
+          // data.retry = true;
+          // this.tokensToRetry.push(data);
         } else {
           data.errorMessage = error ?.msgUser;
           data.exists = 'false';

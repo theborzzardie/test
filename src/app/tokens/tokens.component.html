@@ -49,14 +49,14 @@
 
           <span class="d-block mb-1 greenText">Success count : {{success}}</span>
           <span class="d-block mb-1 redText">Fail count : {{fail}}</span>
-          <span class="d-block mb-1 redText">Retry count : {{tokensToRetry?.length ?? 0}}</span>
-          <span class="d-block mb-4" [ngClass]="{'greenText':tasksToRetry > 0 && tasksToRetry === tokensToRetry?.length}">Retries completed : <strong>{{ tasksToRetry + ' / ' + tokensToRetry?.length}}</strong></span>
+          <!-- <span class="d-block mb-1 redText">Retry count : {{tokensToRetry?.length ?? 0}}</span> -->
+          <!-- <span class="d-block mb-4" [ngClass]="{'greenText':tasksToRetry > 0 && tasksToRetry === tokensToRetry?.length}">Retries completed : <strong>{{ tasksToRetry + ' / ' + tokensToRetry?.length}}</strong></span> -->
 
-          <button class="btn btn-search" *ngIf="tokensToRetry?.length && tasksToRetry !== tokensToRetry?.length" [disabled]="searching &&  ( (totalDone !== tokens.length) || (tasksToRetry !== tokensToRetry?.length))"
-            (click)="retryFailed()">{{searching ? 'Retrying ...' : 'Retry tasks'}}</button>
+          <!-- <button class="btn btn-search" *ngIf="tokensToRetry?.length && tasksToRetry !== tokensToRetry?.length" [disabled]="searching &&  ( (totalDone !== tokens.length) || (tasksToRetry !== tokensToRetry?.length))"
+            (click)="retryFailed()">{{searching ? 'Retrying ...' : 'Retry tasks'}}</button> -->
 
 
-          <span class="redText d-block mb-1" *ngIf="searching">*<small> click download only if sure</small></span>
+          <!-- <span class="redText d-block mb-1" *ngIf="searching">*<small> click download only </small></span> -->
           <button class="btn btn-upload mb-3" title="Download JSON" (click)="generateExcel()" [disabled]="fileUploading || !tokens.length || totalDone === 0" sandbox="allow-downloads">
             <!-- || totalDone !== tokens.length -->
             <i class="fa-solid fa-file-arrow-down"></i> &nbsp; Download file
