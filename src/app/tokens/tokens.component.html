@@ -41,13 +41,13 @@
               </button>
             </div>
 
-            <div class="mb-4" *ngIf="tokens.length">
-              <span class="file-name" [@fadeIn]> {{fileName}}</span>
-              <span class="file-size" [@fadeIn]> {{fileSize / 1000 | number: '1.2-2' }} kb — {{tokens?.length}} items found</span>
+            <div class="mb-4" *ngIf="tokens.length" [@fadeIn]>
+              <span class="file-name"> {{fileName}}</span>
+              <span class="file-size"> {{fileSize / 1000 | number: '1.2-2' }} kb — {{tokens?.length}} items found</span>
+              <span class="file-size mt-1">Estimated completion : {{((tokens?.length * 1500) / 60000) + 1 | number: '1.0-0'}} mins</span>
             </div>
 
-            <button class="btn btn-search" *ngIf="totalDone === 0 || totalDone !== tokens.length" [disabled]="fileUploading || !tokens.length || (searching && totalDone !== tokens.length)"
-              (click)="doLoop()">Process tasks</button>
+            <button class="btn btn-search" *ngIf="totalDone === 0 || totalDone !== tokens.length" [disabled]="fileUploading || !tokens.length || (searching && totalDone !== tokens.length)" (click)="doLoop()">Process tasks</button>
 
 
           </div>
