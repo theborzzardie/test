@@ -7,8 +7,6 @@ import { ApiService } from '../api.service';
 // import { TOKENONE } from '../app.constants';
 import * as XLSX from 'xlsx';
 
-
-
 @Component({
   selector: 'app-tokens',
   templateUrl: './tokens.component.html',
@@ -28,7 +26,7 @@ export class TokensComponent implements OnInit {
 
   totalDone = 0;
   downloadJsonHref: any;
-  tokens: any = [];
+  sites: any = [];
   success = 0;
   fail = 0;
   fileUploading = false;
@@ -37,7 +35,7 @@ export class TokensComponent implements OnInit {
   token: string = '';
   searching = false;
   type = 'accountReference';
-  step = 1;
+  step = 2;
   refreshPage = false;
 
 
@@ -54,7 +52,7 @@ export class TokensComponent implements OnInit {
   }
 
   openUploadDialog(): void {
-    document.getElementById('uploadFileInput') ?.click();
+    document.getElementById('uploadFileInput')?.click();
   }
 
 
@@ -63,24 +61,25 @@ export class TokensComponent implements OnInit {
       (res: any) => {
         // console.log(res);
         localStorage.setItem('kplctoken', res.access_token);
-        this.getTokenData(data);
+        if (data) {
+          this.getSiteData(data);
+        }
 
       },
       (error: any) => {
-        // console.log(error);
-
+        console.log(error);
       }
     )
   }
 
-  uploadRefreshedFile(event: any): void {
+  uploadFile(event: any): void {
 
     let file: File;
 
-    if (event.target ?.files ?.length) {
+    if (event.target?.files?.length) {
       this.fileUploading = true;
       this.totalDone = 0;
-      this.tokens = [];
+      this.sites = [];
       this.success = 0;
       this.fail = 0;
       this.fileName = '';
@@ -109,8 +108,8 @@ export class TokensComponent implements OnInit {
       const data = reader.result;
       workBook = XLSX.read(data, { type: 'binary' });
       jsonData = XLSX.utils.sheet_to_json(workBook.Sheets[workBook.SheetNames[0]]);
-      // this.tokens = jsonData.slice(0, 3);
-      this.tokens = jsonData;
+      // this.sites = jsonData.slice(0, 3);
+      this.sites = jsonData;
 
       this.fileUploading = false;
 
@@ -121,32 +120,32 @@ export class TokensComponent implements OnInit {
   }
 
 
-  doLoop(): void {
+  loopAndGetData(): void {
     this.totalDone = 0;
     this.searching = true;
     this.step = 2;
 
-    this.tokens.forEach((data: any, index: number) => {
+    this.sites.forEach((data: any, index: number) => {
       setTimeout(() => {
-        this.getTokenData(data);
+        this.getSiteData(data);
         this.totalDone += 1;
-        this.searching = this.totalDone === this.tokens.length ? false : true;
+        this.searching = this.totalDone === this.sites.length ? false : true;
 
       }, 1500 * (index + 1));
     });
 
     // setTimeout(() => {
-    //   this.totalDone === this.tokens.length ? console.log(JSON.stringify(this.tokens)) : '';
-    // }, 1500 * this.tokens?.length + 5 );
+    //   this.totalDone === this.sites.length ? console.log(JSON.stringify(this.sites)) : '';
+    // }, 1500 * this.sites?.length + 5 );
   }
 
-  getTokenData(data?: any): void {
-    this.apiService.getTokenData(data.SEARCH_NUMBER, this.type).subscribe(
+  getSiteData(data?: any): void {
+    this.apiService.getSiteData(data.SEARCH_NUMBER, this.type).subscribe(
       (res: any) => {
         data.exists = 'true';
         data.accountNumber = res.body.data[0].accountReference ?? 'NOT FOUND';
         data.meterNumber = res.body.data[0].meterList[0].serialNum ?? 'NOT FOUND';
-        data.balance = res.body.data[0].balance;
+        data.balance = res.body.data[0].balance ?? 'NOT FOUND';
         data.fullName = res.body.data[0].fullName ?? 'NOT FOUND';
         data.lastBillAmount = res.body.data[0].colBills[0].lastBillAmount ?? 'NOT FOUND';
         data.billDate = new Date(res.body.data[0].colBills[0].billDate).toISOString() ?? 'NOT FOUND';
@@ -159,11 +158,11 @@ export class TokensComponent implements OnInit {
       },
       (error: any) => {
         console.log(error);
-        if (error ?.fault && error ?.fault ?.message && (error.fault ?.message === 'Invalid Credentials' || error.fault ?.message === 'Missing Credentials')) {
+        if (error?.fault && error?.fault?.message && (error.fault?.message === 'Invalid Credentials' || error.fault?.message === 'Missing Credentials')) {
           this.getToken(data);
 
         } else {
-          data.errorMessage = error ?.msgUser;
+          data.errorMessage = error?.msgUser;
           data.exists = 'false';
           this.fail += 1;
         }
@@ -182,7 +181,7 @@ export class TokensComponent implements OnInit {
   }
 
   generateDownloadJsonUri(): void {
-    let theJSON = JSON.stringify(this.tokens);
+    let theJSON = JSON.stringify(this.sites);
     let blob = new Blob([theJSON], { type: 'text/json' });
     let url = window.URL.createObjectURL(blob);
     let uri = this.sanitizer.bypassSecurityTrustUrl(url);
@@ -193,7 +192,7 @@ export class TokensComponent implements OnInit {
     this.refreshPage = true;
 
     const filename = this.fileName + '-processed.xlsx'
-    const workSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.tokens);
+    const workSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.sites);
     const workBook: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workBook, workSheet, 'Data');
 
@@ -203,6 +202,22 @@ export class TokensComponent implements OnInit {
       location.reload();
     }, 7000);
   }
+
+
+  generateFailedSitesExcel(): void {
+    this.refreshPage = true;
+
+    const filename = this.fileName + '-processed.xlsx'
+    const workSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.sites.filter((sites: any) => sites.exists === 'false'));
+    const workBook: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workBook, workSheet, 'Data');
+
+    XLSX.writeFile(workBook, filename);
+
+
+  }
+
+
 
 
 

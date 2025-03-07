@@ -33,21 +33,27 @@
 
             <div for="token">&nbsp;</div>
 
-            <div class="d-flex align-items-center" [ngClass]="tokens.length ? 'mb-2' : 'mb-4'">
-              <input id="scoredFileInput" type="file" id="uploadFileInput" accept=".xlsx, .xls" (change)="uploadRefreshedFile($event)" hidden />
-              <button type="button" class="btn btn-upload" (click)="openUploadDialog()" [disabled]="searching || fileUploading">
-                <span> <i class="fa-solid fa-file-arrow-up"></i> &nbsp; {{fileUploading ? 'Uploading...' : 'Upload file'}}</span>
+            <div class="d-flex align-items-center" [ngClass]="sites.length ? 'mb-2' : 'mb-4'">
+              <input id="scoredFileInput" type="file" id="uploadFileInput" accept=".xlsx, .xls"
+                (change)="uploadFile($event)" hidden />
+              <button type="button" class="btn btn-upload" (click)="openUploadDialog()"
+                [disabled]="searching || fileUploading">
+                <span> <i class="fa-solid fa-file-arrow-up"></i> &nbsp;
+                  {{fileUploading ? 'Uploading...' : 'Upload file'}}</span>
 
               </button>
             </div>
 
-            <div class="mb-4" *ngIf="tokens.length" [@fadeIn]>
+            <div class="mb-4" *ngIf="sites.length" [@fadeIn]>
               <span class="file-name"> {{fileName}}</span>
-              <span class="file-size"> {{fileSize / 1000 | number: '1.2-2' }} kb — {{tokens?.length}} items found</span>
-              <span class="file-size mt-1">Estimated completion : {{((tokens?.length * 1500) / 60000) + 1 | number: '1.0-0'}} mins</span>
+              <span class="file-size"> {{fileSize / 1000 | number: '1.2-2' }} kb — {{sites?.length}} items found</span>
+              <span class="file-size mt-1">Estimated completion : {{((sites?.length * 1500) / 60000) + 1 | number:
+                '1.0-0'}} mins</span>
             </div>
 
-            <button class="btn btn-search" *ngIf="totalDone === 0 || totalDone !== tokens.length" [disabled]="fileUploading || !tokens.length || (searching && totalDone !== tokens.length)" (click)="doLoop()">Process tasks</button>
+            <button class="btn btn-search" *ngIf="totalDone === 0 || totalDone !== sites.length"
+              [disabled]="fileUploading || !sites.length || (searching && totalDone !== sites.length)"
+              (click)="loopAndGetData()">Process tasks</button>
 
 
           </div>
@@ -59,15 +65,24 @@
 
             <!-- <p>current token : {{token}} </p> -->
 
-            <p>Fetches completed : <strong>{{ totalDone + ' / ' + tokens.length}}</strong></p>
+            <p>Fetches completed : <strong>{{ totalDone + ' / ' + sites.length}}</strong></p>
             <!-- <a class="btn btn-upload" title="Download JSON" [href]="downloadJsonHref" target="_blank" (click)="generateDownloadJsonUri()" [ngClass]="{ 'disabled-anchor': searching || fileUploading}">Download file</a> -->
 
             <span class="file-name mb-1 greenText">Successful count : {{success}}</span>
             <span class="file-name mb-3 redText">Failed count : {{fail}}</span>
 
-            <button class="btn btn-download mb-2" title="Download JSON" (click)="generateExcel()" [disabled]="fileUploading || !tokens.length || totalDone === 0 || totalDone !== tokens.length" sandbox="allow-downloads">
-              <i class="fa-solid fa-file-arrow-down"></i> &nbsp; Download file & reload
+            <button class="btn btn-download mb-4" title="Download file" (click)="generateExcel()"
+              [disabled]="fileUploading || !sites.length || totalDone === 0 || totalDone !== sites.length"
+              sandbox="allow-downloads">
+              <i class="fa-solid fa-file-arrow-down"></i> &nbsp; Download full file
             </button>
+
+            <button class="btn btn-failed mb-2" title="Download file" (click)="generateFailedSitesExcel()"
+              [disabled]="fileUploading || !sites.length || totalDone === 0 || totalDone !== sites.length"
+              sandbox="allow-downloads">
+              <i class="fa-solid fa-file-arrow-down"></i> &nbsp; Download Failed only
+            </button>
+
             <small class="description ml-1" *ngIf="refreshPage" [@fadeIn]>Page will auto-refresh in 5 seconds</small>
           </div>
         </div>

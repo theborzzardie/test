@@ -14,7 +14,7 @@ export class ApiService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getTokenData(number: any, searchtype: string): Observable<any> {
+  getSiteData(number: any, searchtype: string): Observable<any> {
     return this.httpClient.get<any>(this.baseUrl + searchtype + '=' + number, { observe: 'response' });
   }
 
