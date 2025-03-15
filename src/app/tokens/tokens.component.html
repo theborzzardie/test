@@ -78,7 +78,7 @@
             </button>
 
             <button class="btn btn-failed mb-2" title="Download file" (click)="generateFailedSitesExcel()"
-              [disabled]="fileUploading || !sites.length || totalDone === 0 || totalDone !== sites.length"
+              [disabled]="fileUploading || !sites.length || totalDone === 0 || totalDone !== sites.length || fail === 0"
               sandbox="allow-downloads">
               <i class="fa-solid fa-file-arrow-down"></i> &nbsp; Download Failed only
             </button>

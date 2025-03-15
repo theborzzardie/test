@@ -35,7 +35,7 @@ export class TokensComponent implements OnInit {
   token: string = '';
   searching = false;
   type = 'accountReference';
-  step = 2;
+  step = 1;
   refreshPage = false;
 
 
